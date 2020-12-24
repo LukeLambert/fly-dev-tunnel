@@ -2,7 +2,7 @@
 
 Developers commonly use apps like [ngrok](https://ngrok.com), [localtunnel](https://localtunnel.github.io/www/), or [cloudflared](https://github.com/cloudflare/cloudflared) to expose a local web service at a publicly-accessible URL. This is useful  for developing with HTTPS or sharing a site preview with a colleague or client.
 
-By utilizing [Fly](https://fly.io), [WireGuard](https://www.WireGuard.com), and a reverse proxy, you can achieve something similar with the added benefits of a custom domain and subdomains mapped to specific ports. Best of all, it’s free as long as you stay within Fly’s [generous limits](https://fly.io/docs/about/pricing/).
+By utilizing [Fly](https://fly.io), [WireGuard](https://www.wireguard.com), and a reverse proxy, you can achieve something similar with the added benefits of a custom domain and subdomains mapped to specific ports. Best of all, it’s free as long as you stay within Fly’s [generous limits](https://fly.io/docs/about/pricing/).
 
 ## 1. Install flyctl, the Fly command-line utility
 
@@ -10,7 +10,7 @@ By utilizing [Fly](https://fly.io), [WireGuard](https://www.WireGuard.com), and 
 
 ## 2. Connect to Fly via WireGuard
 
-[Install WireGuard](https://www.WireGuard.com/install/) for your OS. Next, run `flyctl WireGuard create` to create a WireGuard config. Use the following settings:
+[Install WireGuard](https://www.wireguard.com/install/) for your OS. Next, run `flyctl wireguard create` to create a WireGuard config. Use the following settings:
 
 ```
 Region: dev
@@ -22,7 +22,7 @@ Note: The default config sets Fly as your DNS resolver. If you don’t need Fly�
 
 Finally, setup the tunnel in WireGuard:
 - On Mac or Windows, open the WireGuard app and click "Import Tunnel(s) from File". Once imported, click "Activate" to connect.
-- On Linux, [use the command line](https://fly.io/docs/reference/WireGuard/).
+- On Linux, [use the command line](https://fly.io/docs/reference/wireguard/).
 
 ## 3. Create the reverse proxy app
 
