@@ -41,7 +41,7 @@ TEMPLATE_SERVER = '''
     }
 '''
 
-subdomains = dict([s.split(':') for s in os.environ.get('SUBDOMAINS', '').split(',') if s])
+subdomains = dict([s.strip().split(':') for s in os.environ.get('SUBDOMAINS', '').split(',') if s])
 upstream = os.environ.get('UPSTREAM', '')
 if ':' in upstream:
     upstream = '[' + upstream + ']'
