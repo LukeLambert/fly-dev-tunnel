@@ -15,8 +15,8 @@ TEMPLATE_SERVER_DEFAULT = '''
         listen [::]:8080 default_server;
         server_name _;
         location / {
-            return 200;
-            add_header Content-Type text/plain;
+            return 200 '';
+            default_type text/plain;
         }
     }
 '''
