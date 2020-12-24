@@ -1,8 +1,8 @@
 # Fly Dev Tunnel
 
-Developers commonly use apps like [ngrok](https://ngrok.com), [localtunnel](https://localtunnel.github.io/www/), and [cloudflared](https://github.com/cloudflare/cloudflared) to expose a local web service at a publicly-available url. This allows them to develop using HTTPS or share a preview of a site with a client without messing with firewalls and port forwarding.
+Developers commonly use apps like [ngrok](https://ngrok.com), [localtunnel](https://localtunnel.github.io/www/), and [cloudflared](https://github.com/cloudflare/cloudflared) to expose a local web service at a publicly-accessible domain name. This allows them to develop using HTTPS or share a preview of a site with a client without messing with firewalls and port forwarding.
 
-With [Fly](https://fly.io), Wireguard, and a reverse proxy, you can achieve something similar while using your own domain name and mapping subdomains to different ports. Best of all, it's free as long as you stay within Fly's [generous limits](https://fly.io/docs/about/pricing/).
+With [Fly](https://fly.io), [Wireguard](https://www.wireguard.com), and a reverse proxy, you can achieve something similar while using a custom domain and mapping subdomains to different ports. Best of all, it's free as long as you stay within Fly's [generous limits](https://fly.io/docs/about/pricing/).
 
 ## 1. Install flyctl, the Fly command-line utility
 
@@ -46,10 +46,25 @@ Edit `fly.toml` and add these lines at the bottom, replacing the values with you
 
 ```
 [env]
-  SUBDOMAINS = "_:9000"
+  SUBDOMAINS = "_:8000"
   UPSTREAM = "fdaa:0:ffff:ffff:ffff:0:0:1"
 ```
 
 ## 5. Deploy the reverse proxy
 
-Run `flyctl deploy`. Once the app is deployed, you should have a fully functional tunnel from `https://your-app-name.fly.dev` to port `9000` on your local machine.
+Run `flyctl deploy`. Once the app is deployed, you should have a fully functional tunnel from `https://your-app-name.fly.dev` to port `8000` on your local machine.
+
+
+## 6. (Optional) Connect custom domains and subdomains
+
+Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add custom domains. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to ports, update your `fly.toml` and re-run `flyctl deploy`. Example:
+
+```
+[env]
+  SUBDOMAINS = "_:8000,app1:9001,app2:9002"
+  UPSTREAM = "fdaa:0:ffff:ffff:ffff:0:0:1"
+```
+
+## Notes
+
+All traffic will be proxied over IPv6, so your web service should bind to an IPv6 address. To take down the tunnel and prevent traffic from reaching your machine, simply deactivate the Wireguard tunnel.
