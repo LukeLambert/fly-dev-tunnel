@@ -21,7 +21,7 @@ Filename: fly.conf
 Note: The default config sets Fly as your DNS resolver. If you don’t need Fly’s internal DNS features, edit `fly.conf` and comment out the DNS line with a pound sign (`#`).
 
 Finally, setup the tunnel in WireGuard:
-- On Mac or Windows, open the WireGuard app and click "Import Tunnel(s) from File". Once imported, click "Activate" to connect.
+- On Mac or Windows, open the WireGuard app and click `Import Tunnel(s) from File`. Once imported, click `Activate` to connect.
 - On Linux, [use the command line](https://fly.io/docs/reference/wireguard/).
 
 ## 3. Create the reverse proxy app
