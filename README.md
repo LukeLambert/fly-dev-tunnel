@@ -2,11 +2,11 @@
 
 Developers commonly use apps like [ngrok](https://ngrok.com), [localtunnel](https://localtunnel.github.io/www/), and [cloudflared](https://github.com/cloudflare/cloudflared) to expose a local web service at a publicly-accessible domain name. This allows them to develop using HTTPS or share a preview of a site with a client without messing with firewalls and port forwarding.
 
-With [Fly](https://fly.io), [Wireguard](https://www.wireguard.com), and a reverse proxy, you can achieve something similar while using a custom domain and mapping subdomains to different ports. Best of all, it's free as long as you stay within Fly's [generous limits](https://fly.io/docs/about/pricing/).
+With [Fly](https://fly.io), [Wireguard](https://www.wireguard.com), and a reverse proxy, you can achieve something similar while using a custom domain and mapping subdomains to different ports. Best of all, it’s free as long as you stay within Fly’s [generous limits](https://fly.io/docs/about/pricing/).
 
 ## 1. Install flyctl, the Fly command-line utility
 
-Follow the instructions for your OS from the [Fly docs](https://fly.io/docs/flyctl/installing/). After installing, run `flyctl auth login` to sign up or sign in.
+[Follow the instructions](https://fly.io/docs/flyctl/installing/) for your OS. After installing, run `flyctl auth login` to sign up or sign in.
 
 ## 2. Connect to Fly via Wireguard
 
@@ -14,11 +14,11 @@ Follow the instructions for your OS from the [Fly docs](https://fly.io/docs/flyc
 
 ```
 Region: dev
-DNS name for peer: <any name you want for your local machine>
+DNS name for peer: <any name for your machine>
 Filename: fly.conf
 ```
 
-Note: The default config sets Fly as your DNS resolver. If you don't need Fly's internal DNS features, edit `fly.conf` and comment out the DNS line with a pound sign (`#`).
+Note: The default config sets Fly as your DNS resolver. If you don’t need Fly’s internal DNS features, edit `fly.conf` and comment out the DNS line with a pound sign (`#`).
 
 Finally, setup the tunnel in Wireguard:
 - On Mac or Windows, open the Wireguard app and click "Import Tunnel(s) from File". Once imported, click "Activate" to connect.
@@ -29,7 +29,7 @@ Finally, setup the tunnel in Wireguard:
 Run `mkdir tunnel && cd tunnel` to create an empty app folder. Run `flyctl init` to create a `fly.toml` config file. Use the following settings
 
 ```
-App name: <any name you want for you app>
+App name: <any name for you app>
 Select builder: Image
 Select image: lukelambert/fly-dev-tunnel
 Internal port: 8080
@@ -52,12 +52,12 @@ Edit `fly.toml` and add these lines at the bottom, replacing the values with you
 
 ## 5. Deploy the reverse proxy
 
-Run `flyctl deploy`. Once the app is deployed, you should have a fully functional tunnel from `https://your-app-name.fly.dev` to port `8000` on your local machine.
+Run `flyctl deploy`. Once the app is deployed, you should have a tunnel from `https://your-app-name.fly.dev` to port `8000` on your local machine.
 
 
-## 6. (Optional) Connect custom domains and subdomains
+## 6. (Optional) Connect custom (sub)domains
 
-Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add custom domains. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to ports, update your `fly.toml` and re-run `flyctl deploy`. Example:
+Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add a custom domain. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to ports, update your `fly.toml` and re-run `flyctl deploy`. Example:
 
 ```
 [env]
