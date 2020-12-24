@@ -1,12 +1,12 @@
 # Fly Dev Tunnel
 
-Developers commonly use apps like [ngrok](https://ngrok.com), [localtunnel](https://localtunnel.github.io/www/), and [cloudflared](https://github.com/cloudflare/cloudflared) to expose a local web service at a publicly-accessible domain name. This allows them to develop using HTTPS or share a preview of a site with a client without messing with firewalls and port forwarding.
+Developers commonly use apps like [ngrok](https://ngrok.com), [localtunnel](https://localtunnel.github.io/www/), or [cloudflared](https://github.com/cloudflare/cloudflared) to expose a local web service at a publicly-accessible URL. This is useful  for developing with HTTPS or sharing a site preview with a colleague or client.
 
-With [Fly](https://fly.io), [Wireguard](https://www.wireguard.com), and a reverse proxy, you can achieve something similar while using a custom domain and mapping subdomains to different ports. Best of all, it’s free as long as you stay within Fly’s [generous limits](https://fly.io/docs/about/pricing/).
+By utilizing [Fly](https://fly.io), [Wireguard](https://www.wireguard.com), and a reverse proxy, you can achieve something similar with the added benefits of a custom domain and subdomains mapped to specific ports. Best of all, it’s free as long as you stay within Fly’s [generous limits](https://fly.io/docs/about/pricing/).
 
 ## 1. Install flyctl, the Fly command-line utility
 
-[Follow the instructions](https://fly.io/docs/flyctl/installing/) for your OS. After installing, run `flyctl auth login` to sign up or sign in.
+[Follow the instructions](https://fly.io/docs/flyctl/installing/) for your OS. After installation, run `flyctl auth login` to sign up or sign in.
 
 ## 2. Connect to Fly via Wireguard
 
@@ -42,7 +42,7 @@ The reverse proxy is configured using two environment variables:
 - `SUBDOMAINS`: A comma-separated list in the format `subdomain:local_port`. An underscore (`_`) matches the default (catch all) domain.
 - `UPSTREAM`: The IPv6 address of your local machine on the Wireguard network. To find this value, open the `fly.conf` file created in step 2 and copy the address starting with `fd` and ending just before the forward slash.
 
-Edit `fly.toml` and add these lines at the bottom, replacing the values with your own:
+Edit `fly.toml` and add the following lines at the bottom, replacing the values with your own:
 
 ```
 [env]
@@ -67,4 +67,4 @@ Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the 
 
 ## Notes
 
-All traffic will be proxied over IPv6, so your web service should bind to an IPv6 address. To take down the tunnel and prevent traffic from reaching your machine, simply deactivate the Wireguard tunnel.
+All traffic is proxied over IPv6, so your web service should bind to an IPv6 address. To take down the tunnel and prevent traffic from reaching your machine, simply deactivate the Wireguard tunnel.
