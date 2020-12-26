@@ -40,7 +40,7 @@ Internal port: 8080
 The reverse proxy is configured using two environment variables:
 
 - `SUBDOMAINS`: A comma-separated list in the format `subdomain:local_port`. An underscore (`_`) matches the default (catch all) domain.
-- `UPSTREAM`: The internal hostname of your local machine on the WireGuard network. Use the format `your-machine-name._peer.internal` with the name chosen in step 2..
+- `UPSTREAM`: The internal hostname of your local machine on the WireGuard network. Use the format `your-machine-name._peer.internal` with the name chosen in step 2.
 
 Edit `fly.toml` and add the following lines at the bottom, replacing the values with your own:
 
