@@ -14,7 +14,7 @@ By utilizing [Fly](https://fly.io), [WireGuard](https://www.wireguard.com), and 
 
 ```
 Region: dev
-DNS name for peer: <any name for your machine>
+DNS name for peer: <your-machine-name>
 Filename: fly.conf
 ```
 
@@ -29,7 +29,7 @@ Finally, setup the tunnel in WireGuard:
 Run `mkdir tunnel && cd tunnel` to create an empty app folder. Run `flyctl init` to create a `fly.toml` config file. Use the following settings
 
 ```
-App name: <any name for you app>
+App name: <your-app-name>
 Select builder: Image
 Select image: lukelambert/fly-dev-tunnel
 Internal port: 8080
@@ -40,14 +40,17 @@ Internal port: 8080
 The reverse proxy is configured using two environment variables:
 
 - `SUBDOMAINS`: A comma-separated list in the format `subdomain:local_port`. An underscore (`_`) matches the default (catch all) domain.
-- `UPSTREAM`: The IPv6 address of your local machine on the WireGuard network. To find this value, open the `fly.conf` file created in step 2 and copy the address starting with `fd` and ending just before the forward slash.
+- `UPSTREAM`: The internal hostname of your local machine on the WireGuard network. Use the format `your-machine-name._peer.internal` with the name chosen in step 2..
 
 Edit `fly.toml` and add the following lines at the bottom, replacing the values with your own:
 
 ```
+[experimental]
+  private_network = "true"
+
 [env]
   SUBDOMAINS = "_:8000"
-  UPSTREAM = "fdaa:0:ffff:ffff:ffff:0:0:1"
+  UPSTREAM = "your-machine-name._peer.internal"
 ```
 
 ## 5. Deploy the reverse proxy
@@ -60,9 +63,12 @@ Run `flyctl deploy`. Once the app is deployed, you should have a tunnel from `ht
 Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add a custom domain. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to ports, update your `fly.toml` and re-run `flyctl deploy`. Example:
 
 ```
+[experimental]
+  private_network = "true"
+
 [env]
   SUBDOMAINS = "_:8000,app1:9001,app2:9002"
-  UPSTREAM = "fdaa:0:ffff:ffff:ffff:0:0:1"
+  UPSTREAM = "your-machine-name._peer.internal"
 ```
 
 ## Notes
