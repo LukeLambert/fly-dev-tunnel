@@ -6,14 +6,14 @@ By utilizing [Fly](https://fly.io), [WireGuard](https://www.wireguard.com), and 
 
 ## 1. Install flyctl, the Fly command-line utility
 
-[Follow the instructions](https://fly.io/docs/flyctl/installing/) for your OS. After installation, run `flyctl auth login` to sign up or sign in.
+[Follow the instructions](https://fly.io/docs/flyctl/installing/) for your OS. After installation, run `fly auth login` to sign up or sign in.
 
 ## 2. Connect to Fly via WireGuard
 
-[Install WireGuard](https://www.wireguard.com/install/) for your OS. Next, run `flyctl wireguard create` to create a WireGuard config. Use the following settings:
+[Install WireGuard](https://www.wireguard.com/install/) for your OS. To find the nearest WireGuard gateway, run `fly platform regions` and look for regions with a gateway checkmark. Next, run `fly wireguard create` to create a WireGuard config. Use the following settings:
 
 ```
-Region: dev
+Region: <your-region-code>
 DNS name for peer: <your-machine-name>
 Filename: fly.conf
 ```
@@ -26,7 +26,7 @@ Finally, setup the tunnel in WireGuard:
 
 ## 3. Create the reverse proxy app
 
-Run `mkdir tunnel && cd tunnel` to create an empty app folder. Run `flyctl init` to create a `fly.toml` config file. Use the following settings
+Run `mkdir tunnel && cd tunnel` to create an empty app folder. Run `fly init` to create a `fly.toml` config file. Use the following settings
 
 ```
 App name: <your-app-name>
@@ -55,12 +55,12 @@ Edit `fly.toml` and add the following lines at the bottom, replacing the values 
 
 ## 5. Deploy the reverse proxy
 
-Run `flyctl deploy`. Once the app is deployed, you should have a tunnel from `https://your-app-name.fly.dev` to port `8000` on your local machine.
+Run `fly deploy`. Once the app is deployed, you should have a tunnel from `https://your-app-name.fly.dev` to port `8000` on your local machine.
 
 
 ## 6. (Optional) Connect custom (sub)domains
 
-Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add a custom domain. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to ports, update your `fly.toml` and re-run `flyctl deploy`. Example:
+Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add a custom domain. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to ports, update your `fly.toml` and re-run `fly deploy`. Example:
 
 ```
 [experimental]
