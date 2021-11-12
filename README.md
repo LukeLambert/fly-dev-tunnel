@@ -10,47 +10,31 @@ By utilizing [Fly](https://fly.io), [WireGuard](https://www.wireguard.com), and 
 
 ## 2. Connect to Fly via WireGuard
 
-[Install WireGuard](https://www.wireguard.com/install/) for your OS. To find the nearest WireGuard gateway, run `fly platform regions` and look for regions with a gateway checkmark. Next, run `fly wireguard create` to create a WireGuard config. Use the following settings:
+[Install WireGuard](https://www.wireguard.com/install/) for your OS. Next, run `fly wireguard create` to create a WireGuard config. Save it as `Fly.conf`. Make note of your region and peer IP address. You can also view them with `fly wireguard list`.
 
-```
-Region: <your-region-code>
-DNS name for peer: <your-machine-name>
-Filename: fly.conf
-```
-
-Note: The default config sets Fly as your DNS resolver. If you don’t need Fly’s internal DNS features, edit `fly.conf` and comment out the DNS line with a pound sign (`#`).
+Note: The default config sets Fly as your DNS resolver. If you don’t need Fly’s internal DNS features, edit `Fly.conf` and comment out the DNS line with a pound sign (`#`).
 
 Finally, setup the tunnel in WireGuard:
 - On Mac or Windows, open the WireGuard app and click `Import Tunnel(s) from File`. Once imported, click `Activate` to connect.
-- On Linux, [use the command line](https://fly.io/docs/reference/wireguard/).
+- On Linux, [use the command line](https://fly.io/docs/reference/privatenetwork/#ubuntu-linux).
 
 ## 3. Create the reverse proxy app
 
-Run `mkdir tunnel && cd tunnel` to create an empty app folder. Run `fly init` to create a `fly.toml` config file. Use the following settings
-
-```
-App name: <your-app-name>
-Select builder: Image
-Select image: lukelambert/fly-dev-tunnel
-Internal port: 8080
-```
+Run `mkdir tunnel && cd tunnel` to create an empty app folder. Run `fly launch --image lukelambert/fly-dev-tunnel` to create the app. Give it a name and select the same region as your WireGuard connection from step 2.
 
 ## 4. Configure the reverse proxy
 
 The reverse proxy is configured using two environment variables:
 
 - `SUBDOMAINS`: A comma-separated list in the format `subdomain:local_port`. An underscore (`_`) matches the default (catch all) domain.
-- `UPSTREAM`: The internal hostname of your local machine on the WireGuard network. Use the format `your-machine-name._peer.internal` with the name chosen in step 2.
+- `UPSTREAM`: The private IPv6 address of your local machine on the WireGuard network from step 2.
 
-Edit `fly.toml` and add the following lines at the bottom, replacing the values with your own:
+Edit `fly.toml` and update the `[env]` section with your values:
 
 ```
-[experimental]
-  private_network = "true"
-
 [env]
   SUBDOMAINS = "_:8000"
-  UPSTREAM = "your-machine-name._peer.internal"
+  UPSTREAM = "your-peer-ip"
 ```
 
 ## 5. Deploy the reverse proxy
@@ -60,17 +44,14 @@ Run `fly deploy`. Once the app is deployed, you should have a tunnel from `https
 
 ## 6. (Optional) Connect custom (sub)domains
 
-Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add a custom domain. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to ports, update your `fly.toml` and re-run `fly deploy`. Example:
+Visit the [Apps dashboard](https://fly.io/apps/) and select your app. Under the Certificates section, follow the instructions to add a custom domain. You can also add a wildcard subdomain, but this incurs a monthly fee. To map subdomains to local ports, update your `fly.toml` and re-run `fly deploy`. Example:
 
 ```
-[experimental]
-  private_network = "true"
-
 [env]
   SUBDOMAINS = "_:8000,app1:9001,app2:9002"
-  UPSTREAM = "your-machine-name._peer.internal"
+  UPSTREAM = "your-peer-ip"
 ```
 
 ## Notes
 
-All traffic is proxied over IPv6, so your web service should bind to an IPv6 address. To take down the tunnel and prevent traffic from reaching your machine, simply deactivate the WireGuard tunnel.
+All traffic is proxied over IPv6, so your local web service should bind to an IPv6 address. To take down the tunnel and prevent traffic from reaching your machine, simply deactivate the WireGuard tunnel.
