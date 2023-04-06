@@ -20,7 +20,7 @@ Finally, set up the tunnel in WireGuard:
 
 ## 3. Create the reverse proxy app
 
-Run `mkdir tunnel && cd tunnel` to create an empty app folder. Run `fly launch --image lukelambert/fly-dev-tunnel` to create the app. Give it a name and select the same region as your WireGuard connection from step 2.
+Download and open this repo. Run `fly launch` to create the app. Give it a name and select the same region as your WireGuard connection from step 2. Don’t deploy yet.
 
 ## 4. Configure the reverse proxy
 
