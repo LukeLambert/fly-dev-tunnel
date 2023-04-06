@@ -10,13 +10,13 @@ By utilizing [Fly](https://fly.io), [WireGuard](https://www.wireguard.com), and 
 
 ## 2. Connect to Fly via WireGuard
 
-[Install WireGuard](https://www.wireguard.com/install/) for your OS. Next, run `fly wireguard create` to create a WireGuard config. Save it as `Fly.conf`. Make note of your region and peer IP address. You can also view them with `fly wireguard list`.
+[Install WireGuard](https://www.wireguard.com/install/) for your OS. Next, run `fly wireguard create` to create a WireGuard config. Save it as `Fly.conf`. Run `fly wireguard list` to get your region and peer IPv6 address.
 
 Note: The default config sets Fly as your DNS resolver. If you don’t need Fly’s internal DNS features, edit `Fly.conf` and comment out the DNS line with a pound sign (`#`).
 
-Finally, setup the tunnel in WireGuard:
+Finally, set up the tunnel in WireGuard:
 - On Mac or Windows, open the WireGuard app and click `Import Tunnel(s) from File`. Once imported, click `Activate` to connect.
-- On Linux, [use the command line](https://fly.io/docs/reference/privatenetwork/#ubuntu-linux).
+- On Linux, [use the command line](https://fly.io/docs/reference/private-networking/#ubuntu-linux).
 
 ## 3. Create the reverse proxy app
 
